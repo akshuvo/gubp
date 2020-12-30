@@ -63,43 +63,53 @@ html {
     height: 100%;
     text-align: center;
 }
+.msg-form input[type="submit"] {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
 	</style>
 </head>
 <body>
-<div class="messages-wrap">
+
 	<?php if( isset( $_SESSION["username"] ) && isset( $_SESSION["user_id"] ) ) : ?>
-	<?php
-	$user_id = esc_data($_SESSION['user_id']);
-	$sql = "SELECT * FROM MyMessages";
-	$result = $conn->query($sql);
+		<div class="messages-wrap">
+		<?php
+		$user_id = esc_data($_SESSION['user_id']);
+		$sql = "SELECT * FROM MyMessages";
+		$result = $conn->query($sql);
 
-	if ($result->num_rows > 0) {
+		if ($result->num_rows > 0) {
 
-		while($row = $result->fetch_assoc()) { ?>
-		  	<?php
-		  	//print_r($row);
-		  	$classes = " ";
-		  	if ( $row['user_id'] == $user_id ) {
-		  		$classes .= " isme ";
-		  	}
+			while($row = $result->fetch_assoc()) { ?>
+			  	<?php
+			  	//print_r($row);
+			  	$classes = " ";
+			  	if ( $row['user_id'] == $user_id ) {
+			  		$classes .= " isme ";
+			  	}
 
-		  	?>
-		  	<div class="message <?php echo $classes; ?>">
-		  		<div class="txt"><?php echo $row['msg']; ?></div>
-		  		<div class="name"><?php echo $row['username']; ?></div>
-		  		<div class="name"><?php echo $row['reg_date']; ?></div>
-		  	</div>
+			  	?>
+			  	<div class="message <?php echo $classes; ?>">
+			  		<div class="txt"><?php echo $row['msg']; ?></div>
+			  		<div class="name"><?php echo $row['username']; ?></div>
+			  		<div class="name"><?php echo $row['reg_date']; ?></div>
+			  	</div>
 
-	  	<?php }
-	} else {
-	  echo "0 results";
-	}
-	?>
-</div>
-		<form action="" method="post">
-			<textarea name="your-message"  rows="5"></textarea>
+		  	<?php }
+		} else {
+		  echo "0 results";
+		}
+		?>
+
+		<form class="msg-form" method="post">
+			<textarea name="your-message" placeholder="Type Message..." rows="5"></textarea>
 			<input type="submit" value="Send">
 		</form>
+	</div>
 	<?php else: ?>
 		<form class="welcome-form" method="post">
 			<h3>Welcome to Anonymouse ChatBox</h3>
@@ -107,6 +117,7 @@ html {
 			<input type="submit" value="Enter">
 		</form>
 	<?php endif; ?>
+
 
 
 </body>
