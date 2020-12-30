@@ -27,6 +27,7 @@ if ($conn->query($sql) === TRUE) {
   echo "Error creating table: " . $conn->error;
 }
 
+// Escape Function
 function esc_data($data) {
   $data = trim($data);
   $data = stripslashes($data);
@@ -34,6 +35,14 @@ function esc_data($data) {
   return $data;
 }
 
+// Set Session
+if( isset( $_POST["your-name"] ) ){
+	$_SESSION["username"] = esc_data($_POST["your-name"]);
+	$_SESSION['user_id'] = uniqid();
+
+}
+
+// Insert MSG
 if( isset( $_POST["your-message"] ) ){
 	$username = $_SESSION["username"];
 	$user_id = $_SESSION['user_id'];

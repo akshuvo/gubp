@@ -2,13 +2,6 @@
 session_start();
 require_once('db.php');
 
-
-if( isset( $_POST["your-name"] ) ){
-	$_SESSION["username"] = esc_data($_POST["your-name"]);
-	$_SESSION['user_id'] = uniqid();
-
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,7 +9,7 @@ if( isset( $_POST["your-name"] ) ){
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Anonymouse ChatBox</title>
-	<style>
+<style>
 body {
     max-width: 400px;
     margin: 0 auto;
@@ -71,9 +64,9 @@ html {
 * {
     box-sizing: border-box;
 }
-	</style>
+</style>
 </head>
-<body>
+<body onload="scrollBottom()">
 
 	<?php if( isset( $_SESSION["username"] ) && isset( $_SESSION["user_id"] ) ) : ?>
 		<div class="messages-wrap">
@@ -119,6 +112,13 @@ html {
 	<?php endif; ?>
 
 
-
+<div id="scroll"></div>
+<script>
+function scrollBottom(){
+	document.getElementById('scroll').scrollIntoView({
+	  behavior: 'smooth'
+	});
+}
+</script>
 </body>
 </html>
