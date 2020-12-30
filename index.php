@@ -94,7 +94,7 @@ html {
 
 		  	<?php }
 		} else {
-		  echo "0 results";
+		  echo "<div class='no-message'>No Messages</div>";
 		}
 		?>
 
