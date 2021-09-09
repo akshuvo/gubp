@@ -46,12 +46,20 @@ function redirect(){
 if( isset( $_POST["your-name"] ) ){
 	$_SESSION["username"] = esc_data($_POST["your-name"]);
 	$_SESSION['user_id'] = uniqid();
-
+	redirect();
 }
 
 
 // Reset Session
 if( isset( $_GET['exit'] ) ){
 	session_destroy();
+	redirect();
+}
+
+// Delete Chat
+if( isset( $_GET['delete'] ) ){
+	if( isset( $_SESSION["username"] ) && isset( $_SESSION["user_id"] ) ) {
+		$conn->query("UPDATE `MyMessages` SET `msg` = 'message deleted' WHERE `user_id` = '".$_SESSION["user_id"]."'") ;
+	}
 	redirect();
 }

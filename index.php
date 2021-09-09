@@ -109,6 +109,7 @@ textarea {
 	max-width: 426px;
 	top: 30%;
 }
+
 .msg-form input[type="submit"] {
     margin-bottom: 10px;
     width: 100%;
@@ -116,19 +117,29 @@ textarea {
     padding: 8px 4px;
 }
 
-a.exit-chat {
+.no-message {
+    padding: 7px 12px;
+}
+
+
+.action-btn {
     position: fixed;
     right: 4px;
     top: 4px;
+    text-align: right;
 }
 
 </style>
+<script> var session_set = 0; </script>
 </head>
 <body onload="scrollBottom()">
 
 	<?php 
 	if( isset( $_SESSION["username"] ) && isset( $_SESSION["user_id"] ) ) : ?>
-		<a class="exit-chat" href="?exit=true">Exit Chat</a>
+		<div class="action-btn">
+			<a class="exit-chat" href="?exit=true">Exit Chat</a> <br>
+			<a class="delete-chat" href="?delete=true">Delete My Messages</a>
+		</div>
 		<div class="messages-wrap">
 			<div id="push-messages"></div>
 			<div class="clearfix"></div>
@@ -137,6 +148,7 @@ a.exit-chat {
 				<input type="submit" value="Send">
 			</form>
 		</div>
+		<script> var session_set = 1; </script>
 	<?php else: ?>
 		<form class="welcome-form" method="post">
 			<h3>Welcome to Anonymouse ChatBox</h3>
@@ -151,15 +163,25 @@ function scrollBottom() {
 }
 
 // Load Messages
-function loadMsg() {
+function loadMsg( jump = 0 ) {
+
+	if ( !session_set ) {
+		return false;
+	}
+
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function () {
         document.getElementById("push-messages").innerHTML = this.responseText;
+
+        if ( jump ) {
+        	 window.scrollTo(0, document.body.scrollHeight);
+        }
+       
     };
     xhttp.open("GET", "load-messages.php");
     xhttp.send();
 }
-loadMsg();
+loadMsg(1);
 
 // Load Msg every 3 second
 setInterval(function () {
@@ -168,6 +190,10 @@ setInterval(function () {
 
 // Handle Message Submit
 window.addEventListener("load", function () {
+
+	if ( !session_set ) {
+		return false;
+	}
     
     // form elements
     const form = document.getElementById("msg-form");
@@ -181,7 +207,7 @@ window.addEventListener("load", function () {
         // successful submission
         XHR.addEventListener("load", function (event) {
             if (event.target.responseText == "true") {
-                loadMsg();
+                loadMsg(1);
                 form.reset();
             }
         });
