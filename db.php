@@ -2,8 +2,8 @@
 // Do Connection
 $servername = "localhost";
 $username = "root";
-$password = "";
-$dbname = "gub";
+$password = "root";
+$dbname = "local";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -35,6 +35,13 @@ function esc_data($data) {
   return $data;
 }
 
+// Redirect
+function redirect(){
+	$url = "http://$_SERVER[HTTP_HOST]/gubp/";
+	header("Location: {$url}");
+	die();
+}
+
 // Set Session
 if( isset( $_POST["your-name"] ) ){
 	$_SESSION["username"] = esc_data($_POST["your-name"]);
@@ -42,17 +49,9 @@ if( isset( $_POST["your-name"] ) ){
 
 }
 
-// Insert MSG
-if( isset( $_POST["your-message"] ) ){
-	$username = $_SESSION["username"];
-	$user_id = $_SESSION['user_id'];
-	$message = esc_data($_POST['your-message']);
 
-	$sql = "INSERT INTO MyMessages (username, user_id, msg) VALUES ('$username', '$user_id', '$message')";
-	if ($conn->query($sql) === TRUE) {
-
-	} else {
-	  echo "Error: " . $sql . "<br>" . $conn->error;
-	}
+// Reset Session
+if( isset( $_GET['exit'] ) ){
+	session_destroy();
+	redirect();
 }
-
